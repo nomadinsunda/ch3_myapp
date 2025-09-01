@@ -1,10 +1,12 @@
 FROM openjdk:17
-COPY . /example
-WORKDIR /example
 
-RUN adduser --system --no-create-home --disabled-password --disabled-login --shell /bin/sh example
-RUN chown example /example
-RUN chown example /example/*
+WORKDIR /example
+COPY . .
+
+# 시스템 사용자 생성 (홈 X, 로그인 불가)
+RUN useradd -r -M -s /usr/sbin/nologin example \
+ && chown -R example:example /example
+
 USER example
 
 RUN javac Main.java
